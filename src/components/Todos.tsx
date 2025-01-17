@@ -6,12 +6,25 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import useLoadTodos from "../hooks/useLoadTodos";
+import { css } from "@emotion/react";
+import { CircularProgress } from "@mui/material";
 
 export default function Todos() {
   const { data, isLoading } = useLoadTodos();
 
   if (isLoading) {
-    return "Loading...";
+    return (
+      <div
+        css={css`
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100dvh;
+        `}
+      >
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (
