@@ -2,15 +2,18 @@ import { SetupWorker, setupWorker } from "msw/browser";
 import { beforeAll, afterEach, afterAll } from "vitest";
 import { HttpHandler } from "msw";
 
+let workerInstance: SetupWorker | undefined;
+
 export function setupMSW(handlers: HttpHandler[]): SetupWorker | undefined {
-  const worker = setupWorker(...handlers);
+  if (!workerInstance) {
+    workerInstance = setupWorker(...handlers);
 
-  beforeAll(async () => {
-    await worker.start();
-  });
+    beforeAll(async () => {
+      await workerInstance!.start();
+    });
 
-  afterEach(() => worker.resetHandlers());
-  afterAll(() => worker.stop());
-
-  return worker;
+    afterEach(() => workerInstance!.resetHandlers());
+    afterAll(() => workerInstance!.stop());
+  }
+  return workerInstance;
 }
